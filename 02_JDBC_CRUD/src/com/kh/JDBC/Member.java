@@ -19,7 +19,9 @@ public class Member {
 		this.enrollDate = enrollDate;
 	}
 	
-	
+	public Member() {
+
+	}
 
 	@Override
 	public String toString() {

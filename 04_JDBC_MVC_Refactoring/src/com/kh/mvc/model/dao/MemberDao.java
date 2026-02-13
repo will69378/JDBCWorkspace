@@ -1,14 +1,14 @@
 package com.kh.mvc.model.dao;
 
-// static import 방식 103번째 줄에서 사용
-import static com.kh.mvc.common.template.JDBCTemplate.*;
-
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import com.kh.mvc.common.template.JDBCTemplate;
 import com.kh.mvc.model.vo.Member;
@@ -31,11 +31,23 @@ public class MemberDao {
 	@return 처리된 행의 갯수(int)
 */
 	
+	private Properties prop = new Properties();
+	
+	{
+		try {
+			prop.loadFromXML(new FileInputStream(("resources/member_mapper.xml")));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 	public int insertMember(Connection conn, Member m) {
 		int result = 0;
 		
 		PreparedStatement pstmt = null;
-		String sql = "INSERT INTO MEMBER VALUES(?, ?, ?, ?, ?, ?, ?, ?, SYSDATE)";
+		//String sql = "INSERT INTO MEMBER VALUES(?, ?, ?, ?, ?, ?, ?, ?, SYSDATE)";
+		String sql = prop.getProperty("insertMember");
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
@@ -72,7 +84,9 @@ public class MemberDao {
 		List<Member> list = new ArrayList<>();
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
-		String sql = "SELECT * FROM MEMBER";
+		//String sql = "SELECT * FROM MEMBER";
+		String sql = prop.getProperty("selectAll");
+		
 		try {
 			pstmt = conn.prepareStatement(sql);
 			
@@ -108,7 +122,8 @@ public class MemberDao {
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
-		String sql = "SELECT * FROM MEMBER WHERE MEMBER_ID = ?";
+		//String sql = "SELECT * FROM MEMBER WHERE MEMBER_ID = ?";
+		String sql = prop.getProperty("selectByUserId");
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
